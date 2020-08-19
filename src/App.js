@@ -46,19 +46,20 @@ class App extends Component {
   }
 
   render () {
+    const {searchText, list, isToggleOn} = this.state;
     return (
       <div className="App">
         <button onClick={this.handleText}>
-          {this.state.isToggleOn ? 'ON' : 'OFF'}
+          {isToggleOn ? 'ON' : 'OFF'}
         </button>
-        
+
         <form>
           <input type="text"
                   onChange={this.onChangeText} />
-          <span>{this.state.searchText}</span>
+          <span>{searchText}</span>
         </form>
 
-        {this.state.list.filter(isSearched(this.state.searchText)).map(el => {
+        {list.filter(isSearched(searchText)).map(el => {
           return (
           <div key={el.objectID}>
             <span>{el.name}</span>
