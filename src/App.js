@@ -49,9 +49,10 @@ class App extends Component {
     const {searchText, list, isToggleOn} = this.state;
     return (
       <div className="App">
-        <button onClick={this.handleText}>
-          {isToggleOn ? 'ON' : 'OFF'}
-        </button>
+        <HandleButton
+          onClick={this.handleText}
+          isToggleOn={isToggleOn}
+        />
 
         <form>
           <input type="text"
@@ -80,6 +81,18 @@ class App extends Component {
     );
   }
 
+}
+
+class HandleButton extends Component {
+  render () {
+    const { onClick, isToggleOn } = this.props
+    return (
+      <button
+        onClick={onClick}
+      > {isToggleOn ? 'YES' : 'NO'} 
+      </button>
+    )
+  }
 }
 
 export default App;
