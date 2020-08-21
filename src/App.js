@@ -54,29 +54,16 @@ class App extends Component {
           isToggleOn={isToggleOn}
         />
 
-        <form>
-          <input type="text"
-                  onChange={this.onChangeText} />
-          <span>{searchText}</span>
-        </form>
+        <Form
+          onChange={this.onChangeText}
+          searchText={searchText}
+        />
 
-        {list.filter(isSearched(searchText)).map(el => {
-          return (
-          <div key={el.objectID}>
-            <span>{el.name}</span>
-            <span>{el.author}</span>
-            <span>{el.rate}</span>
-            <span>{el.objectID}</span>
-            <span>
-              <button 
-                onClick= { () => this.onDismiss(el.objectID)}
-                type="button">
-              Click ME!
-              </button>
-            </span>
-          </div>
-          )
-        })}
+       <Table
+          list={list}
+          onDismiss={this.onDismiss}
+          pattern={searchText}
+        />
       </div>
     );
   }
@@ -94,5 +81,50 @@ class HandleButton extends Component {
     )
   }
 }
+
+class Form extends Component {
+  render () {
+    const { searchText, onChange } = this.props;
+    return (
+      <form>
+        <input 
+          type="text"
+          onChange={onChange}
+        />
+        <span>{searchText}</span>
+      </form>
+    )
+  }
+}
+
+class Table extends Component {
+  render () {
+    const { list, onDismiss, pattern } = this.props;
+    return (
+      <div>
+        {list.filter(isSearched(pattern)).map(el => {
+          return (
+          <div key={el.objectID}>
+            <span>{el.name}</span>
+            <span>{el.author}</span>
+            <span>{el.rate}</span>
+            <span>{el.objectID}</span>
+            <span>
+              <button 
+                onClick= { () => onDismiss(el.objectID)}
+                type="button">
+              Dismiss
+              </button>
+            </span>
+          </div>
+          )
+        })}
+       </div>
+    )
+  }
+  
+  
+}
+
 
 export default App;
