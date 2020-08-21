@@ -57,7 +57,8 @@ class App extends Component {
         <Form
           onChange={this.onChangeText}
           searchText={searchText}
-        />
+        > Search
+        </Form>
 
        <Table
           list={list}
@@ -84,9 +85,10 @@ class HandleButton extends Component {
 
 class Form extends Component {
   render () {
-    const { searchText, onChange } = this.props;
+    const { searchText, onChange, children } = this.props;
     return (
       <form>
+        {children}
         <input 
           type="text"
           onChange={onChange}
