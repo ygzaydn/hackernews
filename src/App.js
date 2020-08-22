@@ -71,21 +71,16 @@ class App extends Component {
 
 }
 
-class HandleButton extends Component {
-  render () {
-    const { onClick, isToggleOn } = this.props
-    return (
-      <button
-        onClick={onClick}
-      > {isToggleOn ? 'YES' : 'NO'} 
-      </button>
-    )
-  }
+const HandleButton = ({onClick, isToggleOn}) => {
+  return (
+    <button
+    onClick={onClick}
+  > {isToggleOn ? 'YES' : 'NO'} 
+  </button>
+  )
 }
 
-class Form extends Component {
-  render () {
-    const { searchText, onChange, children } = this.props;
+const Form = ({ searchText, onChange, children }) => {
     return (
       <form>
         {children}
@@ -96,12 +91,9 @@ class Form extends Component {
         <span>{searchText}</span>
       </form>
     )
-  }
 }
 
-class Table extends Component {
-  render () {
-    const { list, onDismiss, pattern } = this.props;
+const Table = ({list, onDismiss, pattern}) => {
     return (
       <div>
         {list.filter(isSearched(pattern)).map(el => {
@@ -123,10 +115,8 @@ class Table extends Component {
         })}
        </div>
     )
-  }
-  
-  
 }
+  
 
 
 export default App;
