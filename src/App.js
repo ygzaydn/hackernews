@@ -16,6 +16,9 @@ const list = [
   }
 ];
 
+const largeColumn = { width: '40%'};
+const midColumn = { width: '30%'};
+const smallColumn = { width: '10%'};
 
 const isSearched = searchText => item => item.name.toLowerCase().includes(searchText.toLowerCase());
 
@@ -53,18 +56,20 @@ class App extends Component {
           onClick={this.handleText}
           isToggleOn={isToggleOn}
         />
-
-        <Form
-          onChange={this.onChangeText}
-          searchText={searchText}
-        > Search
-        </Form>
-
-       <Table
+        <div className="page">
+          <div className="interactions">
+            <Form
+            onChange={this.onChangeText}
+            searchText={searchText}
+            > Search
+            </Form>
+          </div>
+          <Table
           list={list}
           onDismiss={this.onDismiss}
           pattern={searchText}
-        />
+          />
+        </div>
       </div>
     );
   }
@@ -95,18 +100,18 @@ const Form = ({ searchText, onChange, children }) => {
 
 const Table = ({list, onDismiss, pattern}) => {
     return (
-      <div>
+      <div className="table">
         {list.filter(isSearched(pattern)).map(el => {
           return (
-          <div key={el.objectID}>
-            <span>{el.name}</span>
-            <span>{el.author}</span>
-            <span>{el.rate}</span>
-            <span>{el.objectID}</span>
+          <div key={el.objectID} className="table-row">
+            <span style={largeColumn}>{el.name}</span>
+            <span style={midColumn}>{el.author}</span>
+            <span style={midColumn}>{el.rate}</span>
+            <span style={smallColumn}>{el.objectID}</span>
             <span>
               <button 
                 onClick= { () => onDismiss(el.objectID)}
-                type="button">
+                type="button" className="button-inline">
               Dismiss
               </button>
             </span>
@@ -116,7 +121,5 @@ const Table = ({list, onDismiss, pattern}) => {
        </div>
     )
 }
-  
-
 
 export default App;
