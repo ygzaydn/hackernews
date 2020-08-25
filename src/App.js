@@ -1,6 +1,14 @@
 import React , { Component } from 'react';
 import './App.css';
 
+const DEFAULT_QUERY = 'redux';
+
+const PATH_BASE = 'https://hn.algolia.com/api/v1';
+const PATH_SEARCH = '/search';
+const PARAM_SEARCH = 'query=';
+
+const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${DEFAULT_QUERY}`;
+
 const list = [
   {
     name: 'React',
@@ -20,21 +28,21 @@ const largeColumn = { width: '40%'};
 const midColumn = { width: '30%'};
 const smallColumn = { width: '10%'};
 
-const isSearched = searchText => item => item.name.toLowerCase().includes(searchText.toLowerCase());
+//const isSearched = searchText => item => item.name.toLowerCase().includes(searchText.toLowerCase());
 
 class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      list,
-      searchText: '',
+      result: null,
+      searchText: DEFAULT_QUERY,
       isToggleOn: true
     };
     this.onDismiss = this.onDismiss.bind(this);
   }
 
   onDismiss(id) {
-    this.setState({list: this.state.list.filter(el => {
+    this.setState({result: this.state.result.filter(el => {
      return el.objectID !== id;
     })})
   }
@@ -48,8 +56,28 @@ class App extends Component {
     this.setState({isToggleOn: !this.state.isToggleOn})
   }
 
+  setSearchTopStories = (result) => {
+    this.setState({result: result.hits});
+  }
+
+  componentDidMount() {
+    const {searchText} = this.state;
+
+    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchText}`,{
+      crossDomain:true,
+    })
+    .then(response => response.json())
+    .then(result => this.setSearchTopStories(result))
+    .catch(error => error); 
+  }
+
   render () {
-    const {searchText, list, isToggleOn} = this.state;
+    const {searchText, result, isToggleOn} = this.state;
+    console.log(result);
+    if (!result) {
+      return null;
+    }
+
     return (
       <div className="App">
         <HandleButton
@@ -65,7 +93,7 @@ class App extends Component {
             </Form>
           </div>
           <Table
-          list={list}
+          list={result}
           onDismiss={this.onDismiss}
           pattern={searchText}
           />
@@ -101,13 +129,13 @@ const Form = ({ searchText, onChange, children }) => {
 const Table = ({list, onDismiss, pattern}) => {
     return (
       <div className="table">
-        {list.filter(isSearched(pattern)).map(el => {
+        {list.map(el => {
           return (
           <div key={el.objectID} className="table-row">
-            <span style={largeColumn}>{el.name}</span>
-            <span style={midColumn}>{el.author}</span>
-            <span style={midColumn}>{el.rate}</span>
-            <span style={smallColumn}>{el.objectID}</span>
+            <span style={largeColumn}>{el.author}</span>
+            <span style={midColumn}>{el.title}</span>
+            <span style={midColumn}>{el.points}</span>
+            <span style={smallColumn}>{el.num_comments}</span>
             <span>
               <button 
                 onClick= { () => onDismiss(el.objectID)}
