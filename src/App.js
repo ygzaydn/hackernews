@@ -42,9 +42,11 @@ class App extends Component {
   }
 
   onDismiss(id) {
-    this.setState({result: this.state.result.filter(el => {
-     return el.objectID !== id;
-    })})
+    const isNotId = item => item.objectID !== id;
+    const updatedHits = this.state.result.hits.filter(isNotId);
+    this.setState({
+      result: {...this.state.result, hits: updatedHits}  
+    })
   }
 
   onChangeText = (event) => {
@@ -57,7 +59,7 @@ class App extends Component {
   }
 
   setSearchTopStories = (result) => {
-    this.setState({result: result.hits});
+    this.setState({result});
   }
 
   componentDidMount() {
@@ -129,7 +131,7 @@ const Form = ({ searchText, onChange, children }) => {
 const Table = ({list, onDismiss, pattern}) => {
     return (
       <div className="table">
-        {list.map(el => {
+        {list.hits.map(el => {
           return (
           <div key={el.objectID} className="table-row">
             <span style={largeColumn}>{el.author}</span>
