@@ -94,11 +94,14 @@ class App extends Component {
             > Search
             </Form>
           </div>
+          {result ? 
           <Table
           list={result}
           onDismiss={this.onDismiss}
           pattern={searchText}
           />
+          : null
+          }
         </div>
       </div>
     );
