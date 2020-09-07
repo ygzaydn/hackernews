@@ -62,6 +62,19 @@ class App extends Component {
     this.setState({result});
   }
 
+  onSearchSubmit = (event) => {
+    const { searchText } = this.state;
+    this.fetchSearchTopStories(searchText);
+    event.preventDefault();
+  }
+
+  fetchSearchTopStories = (searchTerm) => {
+    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`)
+      .then(resp => resp.json())
+      .then(result=> this.setSearchTopStories(result))
+      .catch(err => err);
+  }
+
   componentDidMount() {
     const {searchText} = this.state;
 
@@ -74,7 +87,7 @@ class App extends Component {
   }
 
   render () {
-    const {searchText, result, isToggleOn} = this.state;
+    const {searchText, result } = this.state;
     console.log(result);
     if (!result) {
       return null;
@@ -82,15 +95,11 @@ class App extends Component {
 
     return (
       <div className="App">
-        <HandleButton
-          onClick={this.handleText}
-          isToggleOn={isToggleOn}
-        />
         <div className="page">
           <div className="interactions">
             <Form
             onChange={this.onChangeText}
-            searchText={searchText}
+            onSubmit={this.onSearchSubmit}
             > Search
             </Form>
           </div>
@@ -98,7 +107,6 @@ class App extends Component {
           <Table
           list={result}
           onDismiss={this.onDismiss}
-          pattern={searchText}
           />
           : null
           }
@@ -109,29 +117,21 @@ class App extends Component {
 
 }
 
-const HandleButton = ({onClick, isToggleOn}) => {
-  return (
-    <button
-    onClick={onClick}
-  > {isToggleOn ? 'YES' : 'NO'} 
-  </button>
-  )
-}
-
-const Form = ({ searchText, onChange, children }) => {
+const Form = ({ onChange, children, onSubmit }) => {
     return (
-      <form>
-        {children}
+      <form onSubmit={onSubmit}>
         <input 
           type="text"
           onChange={onChange}
         />
-        <span>{searchText}</span>
+        <button type="submit">
+          {children}
+        </button>
       </form>
     )
 }
 
-const Table = ({list, onDismiss, pattern}) => {
+const Table = ({list, onDismiss}) => {
     return (
       <div className="table">
         {list.hits.map(el => {
