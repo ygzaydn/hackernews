@@ -76,7 +76,7 @@ class App extends Component {
   }
 
   fetchSearchTopStories = (searchTerm, page = 0) => {
-    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`)
+    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`)
       .then(resp => resp.json())
       .then(result=> this.setSearchTopStories(result))
       .catch(err => err);
@@ -97,6 +97,7 @@ class App extends Component {
     console.log(url)
     const {searchText, result } = this.state;
     const page = (result && result.page) || 0;
+    console.log(page);
     console.log(result);
     if (!result) {
       return null;
