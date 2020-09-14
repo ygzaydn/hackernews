@@ -1,5 +1,6 @@
 import React , { Component } from 'react';
 import axios from 'axios'
+import PropTypes from 'prop-types'
 import './App.css';
 
 const DEFAULT_QUERY = 'redux';
@@ -145,6 +146,13 @@ const Form = ({ onChange, children, onSubmit }) => {
       </form>
     )
 }
+Form.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  children: PropTypes.string,
+  onChange: PropTypes.func.isRequired
+};
+
+
 
 const Table = ({list, onDismiss}) => {
     return (
