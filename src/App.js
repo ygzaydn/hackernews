@@ -171,3 +171,5 @@ const Table = ({list, onDismiss}) => {
 }
 
 export default App;
+
+export {Form, Table};
