@@ -1,7 +1,14 @@
 import React , { Component } from 'react';
 import axios from 'axios'
 import PropTypes from 'prop-types'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+
+
 import './App.css';
+library.add(faSpinner);
+
 
 const DEFAULT_QUERY = 'redux';
 const DEFAULT_HPP ='100'
@@ -13,21 +20,6 @@ const PARAM_PAGE= 'page=';
 const PARAM_HPP = 'hitsPerPage=';
 
 const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${DEFAULT_QUERY}&${PARAM_PAGE}`;
-
-const list = [
-  {
-    name: 'React',
-    author: 'Facebook',
-    rate: 5,
-    objectID: 12
-  },
-  {
-    name: 'Angular',
-    author: 'Google',
-    rate: 3,
-    objectID: 1
-  }
-];
 
 const largeColumn = { width: '40%'};
 const midColumn = { width: '30%'};
@@ -41,7 +33,8 @@ class App extends Component {
     this.state = {
       result: null,
       searchText: DEFAULT_QUERY,
-      isToggleOn: true
+      isToggleOn: true,
+      isLoaded: false
     };
     this.onDismiss = this.onDismiss.bind(this);
   }
@@ -68,6 +61,7 @@ class App extends Component {
     const {hits, page} = result;
     const oldHits = page !== 0 ? this.state.result.hits : [];
     const updatedHits = [...oldHits, ...hits]
+    this.setState({isLoaded: false})
     this.setState({hits: updatedHits, page})
   }
 
@@ -78,8 +72,10 @@ class App extends Component {
   }
 
   fetchSearchTopStories = (searchTerm, page = 0) => {
+    this.setState({isLoaded: true })
     axios(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`)
-      .then(result=> this.setSearchTopStories(result.data))
+      .then(result=> {
+        this.setSearchTopStories(result.data)})
       .catch(err => err);
   }
 
@@ -96,7 +92,7 @@ class App extends Component {
 
   render () {
     console.log(url)
-    const {searchText, result } = this.state;
+    const {searchText, result, isLoaded } = this.state;
     const page = (result && result.page) || 0;
     console.log(page);
     console.log(result);
@@ -107,12 +103,16 @@ class App extends Component {
     return (
       <div className="App">
         <div className="page">
+        
           <div className="interactions">
-            <Form
-            onChange={this.onChangeText}
-            onSubmit={this.onSearchSubmit}
-            > Search
-            </Form>
+            {isLoaded ? <FontAwesomeIcon icon="spinner" /> :
+              <Form
+              onChange={this.onChangeText}
+              onSubmit={this.onSearchSubmit}
+              > Search
+              </Form>
+            }
+
           </div>
           {result ? 
           <Table
