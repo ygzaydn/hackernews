@@ -103,16 +103,13 @@ class App extends Component {
     return (
       <div className="App">
         <div className="page">
-        
           <div className="interactions">
-            {isLoaded ?  <Loading /> : 
-              <Form
+            <FormWithLoading
+              isLoading={isLoaded}
               onChange={this.onChangeText}
               onSubmit={this.onSearchSubmit}
-              > Search
-              </Form>
-            }
-
+            > Search 
+            </FormWithLoading>
           </div>
           {result ? 
           <Table
@@ -122,9 +119,11 @@ class App extends Component {
           : null
           }
           <div className="interactions">
-            <Button onClick={() => this.fetchSearchTopStories(searchText, page+1)}>
-              More
-            </Button>
+            <ButtonWithLoading
+              isLoading = {isLoaded}
+              onClick = {() => this.fetchSearchTopStories(searchText, page +1)}
+            > More 
+            </ButtonWithLoading>
           </div>
         </div>
       </div>
@@ -180,6 +179,14 @@ const Table = ({list, onDismiss}) => {
        </div>
     )
 }
+
+const withLoading = (Component) => ({isLoading, ...rest}) => 
+  isLoading 
+  ? <Loading />
+  : <Component {...rest} />
+
+const ButtonWithLoading = withLoading(Button);
+const FormWithLoading = withLoading(Form);
 
 export default App;
 
