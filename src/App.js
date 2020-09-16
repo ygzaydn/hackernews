@@ -111,11 +111,13 @@ class App extends Component {
             > Search 
             </FormWithLoading>
           </div>
+
           <TableWithResult
             result={result}
-            list={result}
+            list={result.hits}
             onDismiss={this.onDismiss}
           />
+
           <div className="interactions">
             <ButtonWithLoading
               isLoading = {isLoaded}
@@ -157,7 +159,7 @@ const Loading = () => <FontAwesomeIcon icon="spinner"/>
 const Table = ({list, onDismiss}) => {
     return (
       <div className="table">
-        {list.hits.map(el => {
+        {list.map(el => {
           return (
           <div key={el.objectID} className="table-row">
             <span style={largeColumn}>{el.author}</span>
@@ -187,6 +189,8 @@ const withResult = (Component) => ({result, ...rest}) =>
   result
   ? <Component {...rest} />
   : null
+
+
 
 const TableWithResult = withResult(Table)
 const ButtonWithLoading = withLoading(Button);
