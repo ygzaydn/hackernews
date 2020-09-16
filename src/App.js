@@ -105,7 +105,7 @@ class App extends Component {
         <div className="page">
         
           <div className="interactions">
-            {isLoaded ? <FontAwesomeIcon icon="spinner" /> :
+            {isLoaded ?  <Loading /> : 
               <Form
               onChange={this.onChangeText}
               onSubmit={this.onSearchSubmit}
@@ -122,9 +122,9 @@ class App extends Component {
           : null
           }
           <div className="interactions">
-            <button onClick={() => this.fetchSearchTopStories(searchText, page+1)}>
+            <Button onClick={() => this.fetchSearchTopStories(searchText, page+1)}>
               More
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -146,13 +146,16 @@ const Form = ({ onChange, children, onSubmit }) => {
       </form>
     )
 }
-Form.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-  children: PropTypes.string,
-  onChange: PropTypes.func.isRequired
-};
 
+const Button = ({onClick, children}) => {
+  return (
+    <button onClick={onClick}>
+      {children}
+    </button>
+  )
+}
 
+const Loading = () => <FontAwesomeIcon icon="spinner"/>
 
 const Table = ({list, onDismiss}) => {
     return (
