@@ -111,13 +111,11 @@ class App extends Component {
             > Search 
             </FormWithLoading>
           </div>
-          {result ? 
-          <Table
-          list={result}
-          onDismiss={this.onDismiss}
+          <TableWithResult
+            result={result}
+            list={result}
+            onDismiss={this.onDismiss}
           />
-          : null
-          }
           <div className="interactions">
             <ButtonWithLoading
               isLoading = {isLoaded}
@@ -185,6 +183,12 @@ const withLoading = (Component) => ({isLoading, ...rest}) =>
   ? <Loading />
   : <Component {...rest} />
 
+const withResult = (Component) => ({result, ...rest}) => 
+  result
+  ? <Component {...rest} />
+  : null
+
+const TableWithResult = withResult(Table)
 const ButtonWithLoading = withLoading(Button);
 const FormWithLoading = withLoading(Form);
 
