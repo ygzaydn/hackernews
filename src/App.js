@@ -1,4 +1,4 @@
-import React , { Component } from 'react';
+import React , { Component, useState } from 'react';
 import axios from 'axios'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -41,8 +41,6 @@ class App extends Component {
       searchText: DEFAULT_QUERY,
       isToggleOn: true,
       isLoaded: false,
-      sortKey: 'NONE',
-      isSortReverse: false
     };
     this.onDismiss = this.onDismiss.bind(this);
   }
@@ -79,11 +77,6 @@ class App extends Component {
     event.preventDefault();
   }
 
-  onSort = (sortKey) => {
-    const isSortReverse = this.state.sortKey === sortKey && !this.state.isSortReverse;
-    this.setState({ sortKey, isSortReverse })
-  }
-
   fetchSearchTopStories = (searchTerm, page = 0) => {
     this.setState({isLoaded: true })
     axios(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`)
@@ -105,7 +98,7 @@ class App extends Component {
 
   render () {
     console.log(url)
-    const {searchText, result, isLoaded, sortKey, isSortReverse } = this.state;
+    const {searchText, result, isLoaded } = this.state;
     const page = (result && result.page) || 0;
     console.log(page);
     console.log(result);
@@ -129,9 +122,6 @@ class App extends Component {
             result={result}
             list={result.hits}
             onDismiss={this.onDismiss}
-            sortKey={sortKey}
-            onSort={this.onSort}
-            isSortReverse={isSortReverse}
           />
 
           <div className="interactions">
@@ -172,12 +162,20 @@ const Button = ({onClick, children}) => {
 
 const Loading = () => <FontAwesomeIcon icon="spinner"/>
 
-const Table = ({list, onDismiss, sortKey, isSortReverse, onSort}) => {
+const Table = ({list, onDismiss}) => {
+
+    const [sortKey, setSortKey] = useState('NONE');
+    const [isSortReverse, setIsSortReverse] = useState(false);
 
     const sortedList = SORTS[sortKey](list);
     const reverseSortedList = isSortReverse
     ? sortedList.reverse()
     : sortedList;
+
+  const onSort = (sortKey) => {
+    setSortKey(sortKey)
+    setIsSortReverse(sortKey === sortKey && !isSortReverse)
+  }
 
     return (
       <div className="table">
