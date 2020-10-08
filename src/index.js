@@ -1,12 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import App from './components/App';
 import * as serviceWorker from './serviceWorker';
+
+const stories = [
+  {
+    title: 'React',
+    url: 'https://facebook.github.io/react',
+    author: 'Jordan Walke',
+    num_comments: 3,
+    points: 4,
+    objectID: 0,
+  }, {
+    title: 'Redux',
+    url: 'https://facebook.github.io/react',
+    author: 'Dan Abramov',
+    num_comments: 2,
+    points: 5,
+    objectID: 1,
+  }
+]
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App stories={stories}/>
   </React.StrictMode>,
   document.getElementById('root')
 );
