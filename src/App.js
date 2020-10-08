@@ -69,6 +69,7 @@ class App extends Component {
     const updatedHits = [...oldHits, ...hits]
     this.setState({isLoaded: false})
     this.setState({hits: updatedHits, page})
+    
   }
 
   onSearchSubmit = (event) => {
