@@ -1,5 +1,7 @@
 import React from 'react';
 import './Stories.css';
+import { connect } from 'react-redux'
+import { getReadableStories } from '../selectors/story' 
 
 import Story from './Story';
 
@@ -25,7 +27,7 @@ const COLUMNS = {
   },
 };
 
-const Stories = ({ stories, onArchive }) =>
+const Stories = ({ stories }) =>
   <div className="stories">
     <StoriesHeader columns={COLUMNS} />
 
@@ -34,7 +36,6 @@ const Stories = ({ stories, onArchive }) =>
         key={story.objectID}
         story={story}
         columns={COLUMNS}
-        onArchive={onArchive}
       />
     )}
   </div>
@@ -51,4 +52,7 @@ const StoriesHeader = ({ columns }) =>
     )}
   </div>
 
-export default Stories;
+const mapStateToProps = state => ({
+  stories: getReadableStories(state)
+})
+export default connect(mapStateToProps)(Stories);
