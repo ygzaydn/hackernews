@@ -2,18 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App';
 import store from './store';
-import { getReadableStories } from './selectors/story'
-import { STORY_ARCHIVE } from './constants/actionTypes'
+import { Provider } from 'react-redux'
 import './index.css';
 
-function render () {
-  ReactDOM.render(
-    <App stories={getReadableStories(store.getState())} 
-        onArchive={id => store.dispatch({ type: STORY_ARCHIVE, id})} />,
-    document.getElementById('root')
-  );
-}
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+);
 
-store.subscribe(render);
-render();
 
